@@ -6,25 +6,41 @@
   {\LARGE\sffamily\slshape #1}
 }
 
-\newcommand{\song}[3]{
+\newcommand{\mysong}[3]{
   \clearpage
   \songTitle{#1}\\[8pt]
   \songAuthor{#2}\\[8pt]
+  \begin{guitarMagic}
+  \begin{guitarCr}
   #3
+  \end{guitarCr}
+  \end{guitarMagic}
 }
 
-\renewcommand{\verse}[2]{
-  \hskip -20pt
-  {\LARGE #1.}
-  #2
+\newenvironment{song}[2]{
+  \clearpage
+  \centering
+  \songTitle{#1}\\[8pt]
+  \songAuthor{#2}\\[8pt]
+  \begin{guitar}
+  \Large
+}{
+  \end{guitar}
 }
 
-\newcommand{\chorus}[1]{
+\renewcommand{\verse}[1]{
   \hskip -20pt
-  {\LARGE\textbf R:}
-  #1
+  {\LARGE\bfseries #1.}
+}
+
+\newcommand{\chorus}{
+  \hskip -20pt
+  {\LARGE\bfseries R:}
 }
 
 \let\g\guitarChord
 \let\#\guitarSharp
 \let\b\guitarFlat
+
+\renewcommand{\guitarPreAccord}{\sffamily\bfseries\Large}
+
