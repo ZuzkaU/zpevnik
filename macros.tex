@@ -17,30 +17,41 @@
   \end{guitarMagic}
 }
 
-\newenvironment{song}[2]{
+\newenvironment{song}[3]{
   \clearpage
   \centering
   \songTitle{#1}\\[8pt]
   \songAuthor{#2}\\[8pt]
+  \vskip -30pt
   \begin{guitar}
+  \leftskip=#3
   \Large
-}{
+}{  
   \end{guitar}
 }
 
 \renewcommand{\verse}[1]{
-  \hskip -20pt
+  \vskip 10pt
+  \hskip -23pt
   {\LARGE\bfseries #1.}
+  \hskip 3pt
 }
 
 \newcommand{\chorus}{
-  \hskip -20pt
+  \vskip 10pt
+  \hskip -28pt
   {\LARGE\bfseries R:}
+  \hskip 3pt
 }
 
-\let\g\guitarChord
-\let\#\guitarSharp
-\let\b\guitarFlat
-
 \renewcommand{\guitarPreAccord}{\sffamily\bfseries\Large}
+
+\renewcommand\guitarEndLine{\medskip\par\leavevmode}
+\renewcommand\guitarEndPar{\par\leavevmode}
+
+% Hack: makes \leftskip work in guitar environment
+\renewcommand\guitarCrOnHook{\begingroup
+  \parindent 0pt\leavevmode\nobreak\hskip-\leftskip\relax
+  \finalhyphendemerits=0\everypar{\nobreak}\sloppy\relax
+  \linepenalty=50\relax\parskip0pt\relax}
 
