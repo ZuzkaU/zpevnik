@@ -1,0 +1,28 @@
+\newcommand{\songTitle}[1]{
+  {\Huge\sffamily\bfseries\MakeUppercase{#1}}
+}
+
+\newcommand{\songAuthor}[1]{
+  {\LARGE\sffamily\slshape #1}
+}
+
+\newcommand{\song}[3]{
+  \clearpage
+  \songTitle{#1}\\[8pt]
+  \songAuthor{#2}\\[8pt]
+  #3
+}
+
+\renewcommand{\verse}[2]{
+  \hskip -20pt
+  {\LARGE #1.}
+  #2
+}
+
+\newcommand{\chorus}[1]{
+  \hskip -20pt
+  {\LARGE\textbf R:}
+  #1
+}
+
+\renewcommand{\crdfont}{\sffamily\large}
