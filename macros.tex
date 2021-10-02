@@ -18,6 +18,12 @@
   \end{guitar}
 }
 
+\newcommand\capo[1]{%
+  \sbox{\mybox}{\slshape Capo #1}%
+  \vskip-40pt\hfill\usebox{\mybox}}
+
+\newcommand\bFont{\LARGE\bfseries}
+
 \renewcommand{\verse}[1]{%
   \sbox{\mybox}{\LARGE\bfseries #1.}%
   \hskip -\wd\mybox%
@@ -25,7 +31,6 @@
   \usebox{\mybox}%
   \hskip 5pt%
 }
-
 
 \newsavebox\mybox
 
@@ -37,10 +42,24 @@
   \hskip 5pt%
 }
 
+% Right repetition
+\newcommand{\rl}{%
+  \raisebox{-.4ex}{\rule{.3ex}{2.5ex}\,\rule{.1ex}{2.5ex}}%
+  \raisebox{.2ex}{:}\hskip 3pt}
+  
+% Left repetition with optional \times
+\newcommand{\rr}[1]{%
+  \hskip 3pt\raisebox{.2ex}{:}%
+  \raisebox{-.4ex}{\rule{.1ex}{2.5ex}\,\rule{.3ex}{2.5ex}}%
+  \ifthenelse{\isempty{#1}}{}{\ #1$\times$}}
+
+% Set chords font
 \renewcommand{\guitarPreAccord}{\sffamily\bfseries\Large}
 
+% Customize end of line behavior
 \renewcommand\guitarEndLine{\par\leavevmode\setstretch{1}}
 \renewcommand\guitarEndPar{\par\setstretch{1}\bigskip\leavevmode}
+\renewcommand\guitarEndDoublePar{\par\setstretch{1}\bigskip\leavevmode}
 
 
 \makeatletter
