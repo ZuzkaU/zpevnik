@@ -6,23 +6,11 @@
   {\LARGE\sffamily\slshape #1}
 }
 
-\newcommand{\mysong}[3]{
-  \clearpage
-  \songTitle{#1}\\[8pt]
-  \songAuthor{#2}\\[8pt]
-  \begin{guitarMagic}
-  \begin{guitarCr}
-  #3
-  \end{guitarCr}
-  \end{guitarMagic}
-}
-
 \newenvironment{song}[3]{
   \clearpage
   \centering
   \songTitle{#1}\\[8pt]
   \songAuthor{#2}\\[8pt]
-  \vskip -30pt
   \begin{guitar}
   \leftskip=#3
   \Large
@@ -31,14 +19,12 @@
 }
 
 \renewcommand{\verse}[1]{
-  \vskip 10pt
   \hskip -23pt
   {\LARGE\bfseries #1.}
   \hskip 3pt
 }
 
 \newcommand{\chorus}{
-  \vskip 10pt
   \hskip -28pt
   {\LARGE\bfseries R:}
   \hskip 3pt
@@ -46,8 +32,31 @@
 
 \renewcommand{\guitarPreAccord}{\sffamily\bfseries\Large}
 
-\renewcommand\guitarEndLine{\medskip\par\leavevmode}
-\renewcommand\guitarEndPar{\par\leavevmode}
+\renewcommand\guitarEndLine{\par\leavevmode\setstretch{1}}
+\renewcommand\guitarEndPar{\par\bigskip\leavevmode}
+
+% Hack: set line spacing when there are chords and set how much the chords are raised
+\def\setChordsLineStretch{\setstretch{1.75}}
+\def\setRaiseHeigth{13pt}
+\renewcommand\guitarPut[1]{\setChordsLineStretch\setbox0\hbox{\strut#1}\leavevmode
+  \raise\setRaiseHeigth\hbox to 0pt{\hbox to\wd0{\guitarPreAccord
+    \hfill\guitarAccord\hfill\hss}\hss}#1}
+\renewcommand\guitarPutOnSpace{\setChordsLineStretch\leavevmode\raise\setRaiseHeigth
+  \hbox{\guitarPreAccord\guitarAccord}}
+\makeatletter
+\renewcommand\gtr@distMerge[2]{\setChordsLineStretch\setbox\guitarBox\hbox{\strut#2}%
+  \setbox0\hbox{\guitarPreAccord\guitarAccord}\leavevmode
+  \guitarDim=\wd0\relax\guitarCalcDim
+  \ifdim\wd\guitarBox<\guitarDim% Accord is too large:
+    \hbox to 0pt{\raise\setRaiseHeigth\hbox{\copy0}\hss}%
+    \hbox to\guitarDim{\box\guitarBox#1}%
+    \let\guitarAccord\toolboxEmpty%now used as a temporary variable.
+  \else
+    \hbox to 0pt{\raise\setRaiseHeigth
+      \hbox to\wd\guitarBox{\hfil\box0\hfil}\hss}%
+    \def\guitarAccord{#2}%
+  \fi\guitarAccord}
+\makeatother
 
 % Hack: makes \leftskip work in guitar environment
 \renewcommand\guitarCrOnHook{\begingroup
