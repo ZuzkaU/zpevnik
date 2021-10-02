@@ -18,16 +18,23 @@
   \end{guitar}
 }
 
-\renewcommand{\verse}[1]{
-  \hskip -23pt
-  {\LARGE\bfseries #1.}
-  \hskip 3pt
+\renewcommand{\verse}[1]{%
+  \sbox{\mybox}{\LARGE\bfseries #1.}%
+  \hskip -\wd\mybox%
+  \hskip -5pt%
+  \usebox{\mybox}%
+  \hskip 5pt%
 }
 
-\newcommand{\chorus}{
-  \hskip -28pt
-  {\LARGE\bfseries R:}
-  \hskip 3pt
+
+\newsavebox\mybox
+
+\newcommand{\chorus}{%
+  \sbox{\mybox}{\LARGE\bfseries R:}%
+  \hskip -\wd\mybox%
+  \hskip -5pt%
+  \usebox{\mybox}%
+  \hskip 5pt%
 }
 
 \renewcommand{\guitarPreAccord}{\sffamily\bfseries\Large}
