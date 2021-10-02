@@ -42,6 +42,14 @@
   \hskip 5pt%
 }
 
+\newcommand{\nchorus}[1]{%
+  \sbox{\mybox}{\LARGE\bfseries R#1:}%
+  \hskip -\wd\mybox%
+  \hskip -5pt%
+  \usebox{\mybox}%
+  \hskip 5pt%
+}
+
 % Right repetition
 \newcommand{\rl}{%
   \raisebox{-.4ex}{\rule{.3ex}{2.5ex}\,\rule{.1ex}{2.5ex}}%
