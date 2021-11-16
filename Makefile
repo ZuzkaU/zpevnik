@@ -5,7 +5,7 @@ all: zpevnik.pdf
 zpevnik.pdf: zpevnik-included.tex
 	pdflatex -jobname=zpevnik $<
 
-zpevnik-included.tex: zpevnik.tex macros.tex songs/*.tex
+zpevnik-included.tex: zpevnik.tex macros.tex tabs.tex songs/*.tex
 	ls songs/*.tex | sed 's/.tex//' | sed -e 's/^/\\input{"/' -e 's/$$/"}/' > songs-input.txt
 	sed -e '/%INCLUDE_SONGS_IN_MAKEFILE/{r songs-input.txt' -e 'd}' zpevnik.tex > zpevnik-included.tex
 

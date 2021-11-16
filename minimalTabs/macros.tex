@@ -1,0 +1,102 @@
+\newcounter{row}
+\newcounter{column}
+\newcounter{bugs}
+
+% making those to active characters for creating nice tabs
+% from ascii tabs without typing commands
+\def\changeCatcodes{%
+    \catcode`E=13
+    \catcode`H=13
+    \catcode`G=13
+    \catcode`D=13
+    \catcode`A=13
+}
+
+\def\changeSpecialCatcodes{%
+    \catcode`-=13
+    \catcode`\^^M=13
+}
+
+\def\changeBackSpecialCatcodes{%
+    \catcode`-=12
+    \catcode`\^^M=5
+}
+
+% global definitions for future active characters (assuming that those aren't
+% used anywhere else as active chars)
+\begingroup
+\changeCatcodes
+\gdefE{\tune e}
+\gdefH{\tune h}
+\gdefG{\tune g}
+\gdefD{\tune d}
+\gdefA{\tune a}
+\endgroup
+
+\gdef\getX#1{.25 * #1}
+
+% print string tune letter
+\gdef\tune#1{%
+    \setcounter{column}{0}
+    \draw node[note] at (\value{row},\getX\value{column}) {\MakeUppercase#1};
+    \stepcounter{column}
+    \debug{.........new line.........}{red}
+}
+
+\gdef\extendstring{%
+    \draw[-] (\value{row}, \getX\value{column}-\getX1) -- (\value{row}, \getX\value{column});
+    %\debug{\the\getX{\value{column}-1}, \the\getX\value{column}}{red}
+    \stepcounter{column}
+    \futurelet\nextchar\checknextchar
+}
+
+\gdef\debug#1#2{
+    \draw node[note,color=#2] at (10+\value{bugs},0) {#1};
+    \stepcounter{bugs}
+}
+
+\gdef\checknextchar{
+    \debug{Next char: \noexpand\nextchar}{blue}
+    \ifx\nextchar\extendstring\debug{..............Is extendstring}{green}\else%
+    \ifx\aaa\nextchar\debug{..............Is newstring}{red}\else%
+    \debug{is other? \ifcat\noexpand\nextchar0{yes}\else{no}\fi (code: `\nextchar)}{red}\fi\fi
+    
+    \ifcat\noexpand\nextchar0{\drawnote\nextchar}\else{}\fi
+}
+
+\gdef\drawnote#1{
+    \draw node[note] at (\value{row},\getX\value{column}-\getX{0.5}) {#1};
+    \stepcounter{column}
+}
+
+\def\starttabs{
+    \setcounter{row}{0}
+    \setcounter{column}{0}
+    \setcounter{bugs}{0}
+    
+    \begin{tikzpicture}[
+	    note/.style={rectangle,scale=0.7},
+	    cm={0,-0.3,1,0,(0,0)}
+	]
+}
+
+\gdef\newstring{\stepcounter{row}}
+
+% have to change catcodes before definition to avoid global redefinition
+% of ~, | and -, and define them locally inside.
+% (tune letters G, D, A, E etc. can be defined globally without possible clash)
+\changeSpecialCatcodes
+\def\mytabenv{\begingroup
+    \changeSpecialCatcodes
+    \let-\extendstring
+    \tracingmacros=1
+    \let^^M\newstring
+    \let\aaa\newstring
+    
+    \starttabs
+
+    \changeCatcodes
+}
+\changeBackSpecialCatcodes
+
+\def\endmytabenv{\end{tikzpicture}\endgroup}
