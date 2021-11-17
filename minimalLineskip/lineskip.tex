@@ -1,0 +1,38 @@
+\documentclass{minimal}
+
+\def\argtohbox#1{\hbox to 20pt{#1\hss}}
+
+\def\newstring{\hfil\penalty-10000 }
+
+\catcode`\^^M=13 % one for reading macro definition
+\def\specialenv{%
+    \begingroup%
+    \catcode`\^^M=13 % ... and one for actually changing it when it is executed
+    %
+    \let^^M\newstring%
+    \leavevmode%
+    %
+    \parindent=0pt%
+    \baselineskip=-10pt%
+    \lineskiplimit=-100pt%
+    \lineskip=0pt%
+}
+\catcode`\^^M=5 % return catcode back
+
+% LESSON LEARNED: baselineskip, lineskiplimit etc. are decided for the whole \par,
+% so there should be one at the end of my env
+% also, don't forget to set \lineskiplimit to sufficiently negative number if I want
+% to use negative \baselineskip
+% also, have to specify negative numbers with a non-active "-"
+\def\endspecialenv{\par\endgroup}
+
+\begin{document}
+\noindent\rule{10cm}{1pt}
+\specialenv
+A
+B
+C
+D
+\endspecialenv
+\end{document}
+
