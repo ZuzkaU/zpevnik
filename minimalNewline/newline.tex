@@ -1,0 +1,25 @@
+\documentclass{minimal}
+
+\gdef\newline{(-----------new line-----------)}
+
+% LESSON LEARNED: \catcode`\^^M is with escape character (to prevent expanding),
+% but \let^^M is without escape because it is already the active character.
+% also, it is neccessary to make sure there are no extra newlines in definitions
+\catcode`\^^M=13
+\def\specialenv{%
+    \begingroup%
+    \let^^M\newline%
+    \catcode`\^^M=13%
+}
+\catcode`\^^M=5
+
+\def\endspecialenv{\endgroup}
+
+\begin{document}
+\specialenv%
+ABC
+DEF
+
+GHI%
+\endspecialenv
+\end{document}

@@ -1,3 +1,10 @@
+% How does this work:
+% 1) big letters (G, E, D, ...) are active characters and do this: write the tune name, and start a box to also write possible further characters (\sharp etc.)
+% 2) bars (|) are active characters and do this: end a box, write it if it is non-empty, write a bar, and start a box again (this time for characters like t19p15~ denoting holding strings)
+% 3) dashes (-) are active characters, also end a box, write dash, start a box.
+% 4) newline (^^M) is active character, ends a group and writes a newline.
+
+
 \newcounter{row}
 \newcounter{column}
 \newcounter{bugs}
@@ -14,11 +21,13 @@
 
 \def\changeSpecialCatcodes{%
     \catcode`-=13
+    \catcode`|=13
     \catcode`\^^M=13
 }
 
 \def\changeBackSpecialCatcodes{%
     \catcode`-=12
+    \catcode`|=12
     \catcode`\^^M=5
 }
 
@@ -26,77 +35,47 @@
 % used anywhere else as active chars)
 \begingroup
 \changeCatcodes
-\gdefE{\tune e}
-\gdefH{\tune h}
-\gdefG{\tune g}
-\gdefD{\tune d}
-\gdefA{\tune a}
+\gdefE{\tune{\string E}}
+\gdefH{\tune{\string H}}
+\gdefG{\tune{\string G}}
+\gdefD{\tune{\string D}}
+\gdefA{\tune{\string A}}
 \endgroup
 
-\gdef\getX#1{.25 * #1}
-
 % print string tune letter
-\gdef\tune#1{%
-    \setcounter{column}{0}
-    \draw node[note] at (\value{row},\getX\value{column}) {\MakeUppercase#1};
-    \stepcounter{column}
-    \debug{.........new line.........}{red}
-}
+\gdef\tune#1{.\hbox to 10pt{#1}}
 
-\gdef\extendstring{%
-    \draw[-] (\value{row}, \getX\value{column}-\getX1) -- (\value{row}, \getX\value{column});
-    %\debug{\the\getX{\value{column}-1}, \the\getX\value{column}}{red}
-    \stepcounter{column}
-    \futurelet\nextchar\checknextchar
-}
+% write bar
+\gdef\writebar{\raisebox{-.4ex}{\rule{.3ex}{2.5ex}}}
 
-\gdef\debug#1#2{
-    \draw node[note,color=#2] at (10+\value{bugs},0) {#1};
-    \stepcounter{bugs}
-}
+% gets additional text after / before one of (tune letter, -, |), and decides what to do with it
+\gdef\gettext#1{(--- this is the text: #1 ---)}
 
-\gdef\checknextchar{
-    \debug{Next char: \noexpand\nextchar}{blue}
-    \ifx\nextchar\extendstring\debug{..............Is extendstring}{green}\else%
-    \ifx\aaa\nextchar\debug{..............Is newstring}{red}\else%
-    \debug{is other? \ifcat\noexpand\nextchar0{yes}\else{no}\fi (code: `\nextchar)}{red}\fi\fi
-    
-    \ifcat\noexpand\nextchar0{\drawnote\nextchar}\else{}\fi
-}
+\gdef\extendstring{\raisebox{.8ex}{\rule{.8em}{.5pt}}}
 
-\gdef\drawnote#1{
-    \draw node[note] at (\value{row},\getX\value{column}-\getX{0.5}) {#1};
-    \stepcounter{column}
-}
 
-\def\starttabs{
-    \setcounter{row}{0}
-    \setcounter{column}{0}
-    \setcounter{bugs}{0}
-    
-    \begin{tikzpicture}[
-	    note/.style={rectangle,scale=0.7},
-	    cm={0,-0.3,1,0,(0,0)}
-	]
-}
 
-\gdef\newstring{\stepcounter{row}}
+\gdef\newstring{\penalty-10000}
+
+\gdef\makevbox#1{\vbox{#1}}
 
 % have to change catcodes before definition to avoid global redefinition
 % of ~, | and -, and define them locally inside.
 % (tune letters G, D, A, E etc. can be defined globally without possible clash)
 \changeSpecialCatcodes
-\def\mytabenv{\begingroup
+\def\mytabenv{%\makevbox
+    \begingroup
+    \showoutput
+    \showboxdepth=3
+    \setlength{\parindent}{0pt}
+    \baselineskip=0pt\lineskiplimit=0pt\lineskip=0pt\relax
     \changeSpecialCatcodes
     \let-\extendstring
-    \tracingmacros=1
+    \let|\writebar
     \let^^M\newstring
-    \let\aaa\newstring
-    
-    \starttabs
 
     \changeCatcodes
 }
 \changeBackSpecialCatcodes
 
-\def\endmytabenv{\end{tikzpicture}\endgroup}
+\def\endmytabenv{\endgroup}
