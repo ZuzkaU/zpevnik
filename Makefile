@@ -10,5 +10,5 @@ zpevnik-included.tex: zpevnik.tex macros.tex tabs.tex songs/*.tex
 	sed -e '/%INCLUDE_SONGS_IN_MAKEFILE/{r songs-input.txt' -e 'd}' zpevnik.tex > zpevnik-included.tex
 
 clean:
-	rm -f songs/*.aux songs/*.log *.aux *.log *.sxc *.sxd *.sbx
+	rm -f songs/*.aux songs/*.log *.aux *.log *.sxc *.sxd *.sbx *.mx1
 	rm -f songs-input.txt zpevnik-included.tex

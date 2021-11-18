@@ -1,0 +1,81 @@
+\newcounter{row}
+
+\def\changecatcodes{%
+    \catcode`C=13
+    \catcode`D=13
+    \catcode`E=13
+    \catcode`F=13
+    \catcode`G=13
+    \catcode`A=13
+    \catcode`H=13
+    %
+    \catcode`\|=11
+    \catcode`\~=11
+    \catcode`\^^M=13
+    \catcode`-=12
+}
+
+% print string tune letter
+\gdef\tune#1{\raisebox{1pt}{\hbox to 10pt{\scriptsize#1\hss}}}
+
+\begingroup
+\changecatcodes
+\gdef\aaa#1#2^^M{\tune{#1}\startstring##2^^M}
+
+\tracingmacros=1
+\gdef\startstring#1^^M{\parindent=0pt%
+    \tokencycle%
+    {\addcytoks{\ifx-##1\rule[.8ex]{.8em}{.5pt}\else{%
+    \ifx |##1\makebar\else{%
+    \ifx ~##1{\raisebox{1pt}{\makebox[.8em]{\resizebox{.6em}{!}{$\sim$}\hfil}}}%
+    \else\makebox[.8em]{##1}%
+    \fi}\fi}\fi}}%
+    {\processtoks{##1}}%
+    {\addcytoks{##1}}%
+    {}#1\endtokencycle%
+    \stepcounter{row}\newline}
+
+\gdefC{\tune{\string C}\startstring}
+\gdefD{\tune{\string D}\startstring}
+\gdefE{\tune{\string E}\startstring}
+\gdefF{\tune{\string F}\startstring}
+\gdefG{\tune{\string G}\startstring}
+\gdefA{\tune{\string A}\startstring}
+\gdefH{\tune{\string H}\startstring}
+\endgroup
+
+
+% write bar
+\gdef\makebar{%
+    \ifnum\value{row}=0%
+        \rule[.8ex]{.8pt}{0ex}%
+    \else%
+        \rule[.8ex]{.8pt}{12.5pt}%
+    \fi}
+
+
+% have to change catcodes before definition to avoid global redefinition
+% of ~, | and -, and define them locally inside.
+% (tune letters G, D, A, E etc. can be defined globally without possible clash)
+\begingroup
+\changecatcodes
+\gdef\tabs{%
+    \phantom{$a$}
+    \begingroup%
+    \changecatcodes%
+    %
+    \setcounter{row}{0}%
+    %
+    \leavevmode%
+    %
+    \parindent=0pt%
+    \baselineskip=10pt%
+    \lineskiplimit=-100pt%
+    \lineskip=0pt%
+    \noindent%
+    \normalsize%
+}
+\endgroup
+
+\gdef\endtabs{\par\endgroup}
+
