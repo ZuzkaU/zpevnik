@@ -23,7 +23,7 @@
 \gdef\aaa#1#2^^M{\tune{#1}\startstring##2^^M}
 
 \tracingmacros=1
-\gdef\startstring#1^^M{\parindent=0pt%
+\gdef\startstring#1^^M{\nopagebreak[4]\parindent=0pt%
     \tokencycle%
     {\addcytoks{\ifx-##1\rule[.8ex]{.8em}{.5pt}\else{%
     \ifx |##1\makebar\else{%
@@ -59,8 +59,8 @@
 % (tune letters G, D, A, E etc. can be defined globally without possible clash)
 \begingroup
 \changecatcodes
-\gdef\tabs{%
-    \phantom{$a$}
+\gdef\tabs{\pagebreak[1]%
+    \sbox0{$a$}% to load amsfonts/umsa.fd prior to changing catcodes to active
     \begingroup%
     \changecatcodes%
     %
@@ -74,8 +74,9 @@
     \lineskip=0pt%
     \noindent%
     \normalsize%
+    %\def\par{\setcounter{row}{0}}%
 }
 \endgroup
 
-\gdef\endtabs{\par\endgroup}
+\gdef\endtabs{\pagebreak[1]\par\endgroup\vskip-10pt}
 
