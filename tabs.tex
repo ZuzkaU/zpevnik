@@ -15,6 +15,8 @@
     \catcode`-=12
 }
 
+\def\charwidth{.65em}
+
 % print string tune letter
 \gdef\tune#1{\raisebox{1pt}{\hbox to 10pt{\scriptsize#1\hss}}}
 
@@ -25,10 +27,10 @@
 \tracingmacros=1
 \gdef\startstring#1^^M{\nopagebreak[4]\parindent=0pt%
     \tokencycle%
-    {\addcytoks{\ifx-##1\rule[.8ex]{.8em}{.5pt}\else{%
+    {\addcytoks{\ifx-##1\rule[.8ex]\charwidth{.5pt}\else{%
     \ifx |##1\makebar\else{%
-    \ifx ~##1{\raisebox{1pt}{\makebox[.8em]{\resizebox{.6em}{!}{$\sim$}\hfil}}}%
-    \else\makebox[.8em]{##1}%
+    \ifx ~##1{\raisebox{1.5pt}{\makebox[\charwidth]{\resizebox{.5em}{!}{$\sim$}\hfil}}}%
+    \else\makebox[\charwidth]{##1}%
     \fi}\fi}\fi}}%
     {\processtoks{##1}}%
     {\addcytoks{##1}}%
@@ -59,10 +61,12 @@
 % (tune letters G, D, A, E etc. can be defined globally without possible clash)
 \begingroup
 \changecatcodes
-\gdef\tabs{\pagebreak[1]%
+\gdef\tabs#1{\pagebreak[1]%
     \sbox0{$a$}% to load amsfonts/umsa.fd prior to changing catcodes to active
     \begingroup%
     \changecatcodes%
+    %
+    \leftskip=#1%
     %
     \setcounter{row}{0}%
     %
@@ -78,5 +82,5 @@
 }
 \endgroup
 
-\gdef\endtabs{\pagebreak[1]\par\endgroup\vskip-10pt}
+\gdef\endtabs{\par\pagebreak[1]\endgroup\vskip-10pt}
 
