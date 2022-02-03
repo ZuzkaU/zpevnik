@@ -11,7 +11,7 @@ Idea a nějaká makra ukradeny od https://github.com/martisekpetr/bratruv-zpevni
 [A]točí se točí já [D]jsem v tom nevin[A]ně.
 \end{song}
 ```
-<img src="https://raw.githubusercontent.com/ZuzkaU/zpevnik/master/.readme-song.png">
+<img src="https://raw.githubusercontent.com/ZuzkaU/zpevnik/master/.readme-song.png" max-width=100%>
 
 ### Tabs
 ```
@@ -24,7 +24,7 @@ A|-0-------------------3-------|
 E|---------3-------1-------3---|
 \endtabs
 ```
-<img src="https://raw.githubusercontent.com/ZuzkaU/zpevnik/master/.readme-tabs.png">
+<img src="https://raw.githubusercontent.com/ZuzkaU/zpevnik/master/.readme-tabs.png" max-width=100%>
 
 ### Licence
 
