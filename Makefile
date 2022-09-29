@@ -2,7 +2,7 @@
 
 all: zpevnik.pdf
 
-zpevnik.pdf: zpevnik-included.tex
+zpevnik.pdf: zpevnik-included.tex zpevnik.tex macros.tex tabs.tex songs/*.tex
 	latexmk -pdf -jobname=zpevnik $<
 
 zpevnik-included.tex: zpevnik.tex macros.tex tabs.tex songs/*.tex
