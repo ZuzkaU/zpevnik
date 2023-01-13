@@ -1,6 +1,7 @@
 \newcounter{row}
 
 \def\changecatcodes{%
+    % Tunes, start of a string line
     \catcode`C=13
     \catcode`D=13
     \catcode`E=13
@@ -9,20 +10,39 @@
     \catcode`A=13
     \catcode`H=13
     %
+    \catcode`X=13 % to show chords above
+    %
     \catcode`\|=11
     \catcode`\~=11
-    \catcode`\^^M=13
+    \catcode`\^^M=13 % newline
     \catcode`-=12
 }
 
-\def\charwidth{.65em}
+\def\charwidth{.65em} % width of each character in the tab
 
 % print string tune letter
 \gdef\tune#1{\raisebox{1pt}{\hbox to 10pt{\scriptsize#1\hss}}}
+\gdef\notune#1{\raisebox{1pt}{\hbox to 10pt{}}}
+
+%TODO
+\begingroup
+\catcode`\|=11
+\catcode`\^^M=13 % newline
+\catcode`-=12
+\gdef\starttabchords#1^^M{\nopagebreak[4]\parindent=0pt%
+    \tokencycle%
+    {\addcytoks{\ifx-##1\phantom{\rule[.8ex]\charwidth{.5pt}}\else{%
+    \ifx |##1\makebar%
+    \else\makebox[\charwidth]{##1}%
+    \fi}\fi}}%
+    {\processtoks{##1}}%
+    {\addcytoks{##1}}%
+    {}#1\endtokencycle\catcode`C=13\catcode`D=13\catcode`E=13\catcode`A=13%
+    \newline}
+\endgroup
 
 \begingroup
 \changecatcodes
-\gdef\aaa#1#2^^M{\tune{#1}\startstring##2^^M}
 
 \tracingmacros=1
 \gdef\startstring#1^^M{\nopagebreak[4]\parindent=0pt%
@@ -44,6 +64,7 @@
 \gdefG{\tune{\string G}\startstring}
 \gdefA{\tune{\string A}\startstring}
 \gdefH{\tune{\string H}\startstring}
+\gdefX{\catcode`C=11\catcode`D=11\catcode`E=11\catcode`A=11\notune{\string X}\starttabchords}
 \endgroup
 
 
