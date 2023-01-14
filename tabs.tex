@@ -1,7 +1,6 @@
 \newcounter{row}
 
-\def\changecatcodes{%
-    % Tunes, start of a string line
+\def\changelettercatcodes{%
     \catcode`C=13
     \catcode`D=13
     \catcode`E=13
@@ -9,6 +8,21 @@
     \catcode`G=13
     \catcode`A=13
     \catcode`H=13
+}
+
+\def\changelettercatcodesback{%
+    \catcode`C=11
+    \catcode`D=11
+    \catcode`E=11
+    \catcode`F=11
+    \catcode`G=11
+    \catcode`A=11
+    \catcode`H=11
+}
+
+\def\changecatcodes{%
+    % Tunes, start of a string line
+    \changelettercatcodes%
     %
     \catcode`X=13 % to show chords above
     %
@@ -24,21 +38,26 @@
 \gdef\tune#1{\raisebox{1pt}{\hbox to 10pt{\scriptsize#1\hss}}}
 \gdef\notune#1{\raisebox{1pt}{\hbox to 10pt{}}}
 
-%TODO
 \begingroup
-\catcode`\|=11
-\catcode`\^^M=13 % newline
-\catcode`-=12
+\catcode`\|=11%
+\catcode`\^^M=13% newline
+\catcode`-=12%
+\catcode`\ =12% change catcode of space to "other" to process them as characters. There can't be spaces in the following code.
 \gdef\starttabchords#1^^M{\nopagebreak[4]\parindent=0pt%
-    \tokencycle%
-    {\addcytoks{\ifx-##1\phantom{\rule[.8ex]\charwidth{.5pt}}\else{%
-    \ifx |##1\makebar%
-    \else\makebox[\charwidth]{##1}%
-    \fi}\fi}}%
-    {\processtoks{##1}}%
-    {\addcytoks{##1}}%
-    {}#1\endtokencycle\catcode`C=13\catcode`D=13\catcode`E=13\catcode`A=13%
-    \newline}
+\tokencycle%
+{\addcytoks{\ifx-##1\phantom{\rule[.8ex]\charwidth{.5pt}}%
+\else{\ifx##1|\makebar%
+\else{\ifx ##1\makebox[\charwidth]{}% process space
+%TODO: count characters and spaces, make letters (chords) large and before next non-space character fill the space with one box of a fitting size.
+%TODO: don't require to start the chords with X
+\else\makebox[\charwidth]{##1}\fi}%
+\fi}\fi}}%
+{\processtoks{##1}}%
+{\addcytoks{##1}}%
+{}% ignore spaces, space char now has catcode 12
+#1\endtokencycle%
+\catcode`\ =10\changelettercatcodes%
+\newline}
 \endgroup
 
 \begingroup
@@ -51,10 +70,11 @@
     \ifx |##1\makebar\else{%
     \ifx ~##1{\raisebox{1.5pt}{\makebox[\charwidth]{\resizebox{.5em}{!}{$\sim$}\hfil}}}%
     \else\makebox[\charwidth]{##1}%
-    \fi}\fi}\fi}}%
-    {\processtoks{##1}}%
-    {\addcytoks{##1}}%
-    {}#1\endtokencycle%
+    \fi}\fi}\fi}}% apply above logic for char tokens (and those we declared char)
+    {\processtoks{##1}}% group content processing directive
+    {\addcytoks{##1}}% macro processing directive
+    {}% space processing directive
+    #1\endtokencycle%
     \stepcounter{row}\newline}
 
 \gdefC{\tune{\string C}\startstring}
@@ -64,7 +84,7 @@
 \gdefG{\tune{\string G}\startstring}
 \gdefA{\tune{\string A}\startstring}
 \gdefH{\tune{\string H}\startstring}
-\gdefX{\catcode`C=11\catcode`D=11\catcode`E=11\catcode`A=11\notune{\string X}\starttabchords}
+\gdefX{\catcode`\ =12\changelettercatcodesback\notune{\string X}\starttabchords}
 \endgroup
 
 
