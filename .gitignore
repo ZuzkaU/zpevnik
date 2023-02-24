@@ -1,5 +1,21 @@
-todo-songs.txt
-Zpěvník
+# other songbooks
 bratruv.pdf
 oranzovy.pdf
+expedicniKlubovna.pdf
 
+# notes on songs
+todo-songs.txt
+Zpěvník
+
+# generated tex files
+*.aux
+*.log
+*.sxc
+*.sxd
+*.sbx
+*.mx1
+*.fls
+*.fdb_latexmk
+songs-input.txt
+zpevnik-included.tex
+zpevnik.toc
