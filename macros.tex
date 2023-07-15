@@ -1,6 +1,5 @@
 \newcommand{\songTitle}[1]{
   {\Huge\sffamily\bfseries\MakeUppercase{#1}}
-   \addtocontents{toc}{\noindent#1\par}%
 }
 
 \newcommand{\songAuthor}[1]{
@@ -10,6 +9,7 @@
 \newenvironment{song}[3]{
   \clearpage
   \centering
+  \phantomsection\addcontentsline{toc}{section}{\noindent{#1}}%
   \songTitle{#1}\\[8pt]
   \songAuthor{#2}\\
   \begin{guitar}

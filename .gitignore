@@ -12,6 +12,7 @@ videa
 # generated tex files
 *.aux
 *.log
+*.out
 *.sxc
 *.sxd
 *.sbx

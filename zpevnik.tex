@@ -30,9 +30,19 @@
 \usepackage{tokcycle}
 
 \usepackage{multicol}
+\usepackage{hyperref}
+\hypersetup{
+    linkbordercolor={1 .8 .8}
+}
+\usepackage{tocloft} % for reducing spacing in table of contents
+
 
 \include{macros}
 \include{tabs}
+
+
+\AtBeginDocument{\addtocontents{toc}{\protect\begin{multicols}{2}}}
+\AtEndDocument{\addtocontents{toc}{\protect\end{multicols}}}
 
 \begin{document}
 
@@ -45,6 +55,8 @@
 \setcounter{page}{0}
 \clearpage
 
+\pagenumbering{gobble} % removes page number from ToC
+\renewcommand\cftsecafterpnum{\\ \vspace{-20pt}} % reduces spacing in ToC
 \tableofcontents
 \clearpage
 
