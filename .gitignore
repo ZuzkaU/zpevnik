@@ -20,6 +20,7 @@ videa
 *.mx1
 *.fls
 *.fdb_latexmk
+*.xmpi
 songs-input.txt
 zpevnik-included.tex
 zpevnik.toc
